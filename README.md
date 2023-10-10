@@ -1,1 +1,73 @@
 # docker-python
+
+## 実行環境のセットアップ
+
+1. コンテナの起動
+    ```
+    docker-compose up -d --build
+    ```
+
+2. 作られたイメージの確認
+    ```
+    docker image ls
+    ```
+
+3. 作られたコンテナの確認
+    ```
+    docker container ls
+    ```
+
+4. コンテナへの接続
+    ```
+    docker-compose exec python3 bash
+    ```
+
+5. 実行環境の確認
+    ```
+    python --version
+    ```
+
+6. 動作確認
+    ```
+    python opt/sample.python 180.0
+    ```
+    結果として3.141592653589793のように円周率の値が出てきたら成功。
+
+7. 実行環境から戻る
+    ```
+    exit
+    ```
+
+## 実行環境の削除
+
+1. Dockerコンテナの終了と削除
+    ```
+    docker-compose down
+    ```
+    以下のコマンドを実行して表示されるコンテナがなければ成功。
+    ```
+    docker container ls
+    ```
+
+    - 再度コンテナを実行したい場合
+    イメージは作成されている状態なので--buildオプションが不要
+        ```
+        docker-compose up -d
+        ```
+
+2. イメージの削除
+    以下のコマンドを実行してイメージの一覧を取得する。
+    ```
+    docker image ls
+    ```
+    表示されたイメージの一覧から、削除したいイメージのimageidを削除する。
+    ```
+    docker image rm imageid
+    ```
+
+
+## 参考文献
+
+1. DockerでPython実行環境を作ってみる: https://qiita.com/jhorikawa_err/items/fb9c03c0982c29c5b6d5
+
+2. Markdown記法/書き方（見出し・表・リンク・画像・文字色など）: https://notepm.jp/help/how-to-markdown
