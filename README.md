@@ -11,11 +11,13 @@
     ```
     docker image ls
     ```
+    docker-compose.ymlで設定された名称のイメージが生成されていたら成功。
 
 1. 作られたコンテナの確認
     ```
     docker container ls
     ```
+    docker-compose.ymlで設定された名称のコンテナが生成されていたら成功。
 
 1. コンテナへの接続
     ```
@@ -56,13 +58,12 @@
         ```
 
 1. イメージの削除
-    以下のコマンドを実行してイメージの一覧を取得する。
+    ```
+    docker image rm hogehoge
+    ```
+    以下のコマンドを実行して表示されるイメージがなければ成功。
     ```
     docker image ls
-    ```
-    表示されたイメージの一覧から、削除したいイメージのimageidを削除する。
-    ```
-    docker image rm imageid
     ```
 
 
