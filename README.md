@@ -31,7 +31,7 @@
 
 1. 動作確認
     ```
-    python opt/sample.python 180.0
+    python opt/sample.py 180.0
     ```
     結果として3.141592653589793のように円周率の値が出てきたら成功。
 
