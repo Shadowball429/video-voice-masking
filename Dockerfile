@@ -32,7 +32,7 @@ WORKDIR /code
 # 依存関係のインストール
 # requirements.txtファイルに記載されたPythonパッケージをインストールします。
 COPY requirements.txt /code/
-RUN pip install -r requirements.txt
+RUN pip install -r /code/requirements.txt
 
 # コードのコピー
 # ホストマシン上のコードをコンテナ内の/codeディレクトリにコピーします。
