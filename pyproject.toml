@@ -1,0 +1,23 @@
+[project]
+name = "docker_python"
+version = "0.1.0"
+description = "Template for python docker-compose build"
+readme = "README.md"
+requires-python = ">=3.12"
+# uv で解決する依存。追加したら uv lock を再実行する
+dependencies = [
+    "requests",
+]
+
+[build-system]
+# uv がビルドバックエンド情報を必要とするため最低限定義
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+# 開発用の追加依存を指定してください。編集したら `uv lock` で uv.lock を更新します。
+dev = []
+
+[tool.uv]
+# パッケージを持たない構成のため、名前に対応するモジュールを探しに行かないよう明示します。
+package = false

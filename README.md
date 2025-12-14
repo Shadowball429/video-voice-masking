@@ -33,13 +33,14 @@
 1. 実行環境の確認
 
     ```bash
-    python --version
+    uv --version
+    uv run python --version
     ```
 
 1. 動作確認
 
     ```bash
-    python opt/sample.py 180.0
+    uv run python opt/sample.py 180.0
     ```
 
     結果として3.141592653589793のように円周率の値が出てきたら成功。
