@@ -39,10 +39,3 @@ def suppress_vocal_band(audio: np.ndarray, sample_rate: int, gain_db: float) -> 
         )
     logger.debug("Applied vocal-band suppression gain=%.1f dB", gain_db)
     return tensor.T.numpy()
-
-
-def blend_preserve_sfx(processed: np.ndarray, original: np.ndarray, preserve_sfx: float) -> np.ndarray:
-    preserve_sfx = float(np.clip(preserve_sfx, 0.0, 1.0))
-    blended = (1 - preserve_sfx) * processed + preserve_sfx * original
-    logger.debug("Blended with original for SFX preserve=%.2f", preserve_sfx)
-    return blended

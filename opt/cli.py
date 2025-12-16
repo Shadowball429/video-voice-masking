@@ -9,7 +9,7 @@ if __package__ is None or __package__ == "":
 
 import typer
 
-from opt.audio.postprocess import blend_preserve_sfx, apply_noise_gate, high_freq_restore, suppress_vocal_band
+from opt.audio.postprocess import apply_noise_gate, high_freq_restore, suppress_vocal_band
 from opt.audio.preprocess import load_audio, peak_normalize, subtract_vocals, write_audio
 from opt.io.ffmpeg import extract_audio, list_audio_streams, mute_audio_track, mux_video_with_audio
 from opt.logging_setup import setup_logging
@@ -26,9 +26,9 @@ Preset = Literal["light", "balanced", "aggressive"]
 Mode = Literal["auto", "tracks", "ai", "hybrid"]
 
 PRESETS: dict[Preset, dict[str, float]] = {
-    "light": {"strength": 1.1, "preserve_sfx": 0.0, "gate_db": -35.0, "hf_restore": 0.1, "vocal_band_cut_db": -10.0},
-    "balanced": {"strength": 1.35, "preserve_sfx": 0.0, "gate_db": -42.0, "hf_restore": 0.1, "vocal_band_cut_db": -15.0},
-    "aggressive": {"strength": 1.6, "preserve_sfx": 0.0, "gate_db": -48.0, "hf_restore": 0.05, "vocal_band_cut_db": -18.0},
+    "light": {"strength": 1.1, "gate_db": -35.0, "hf_restore": 0.1, "vocal_band_cut_db": -10.0},
+    "balanced": {"strength": 1.35, "gate_db": -42.0, "hf_restore": 0.1, "vocal_band_cut_db": -15.0},
+    "aggressive": {"strength": 1.6, "gate_db": -48.0, "hf_restore": 0.05, "vocal_band_cut_db": -18.0},
 }
 
 logger = setup_logging(__name__)
@@ -41,7 +41,6 @@ def print_progress(label: str, percent: int, message: str) -> None:
 def resolve_preset(
     preset: Optional[Preset],
     strength: float,
-    preserve_sfx: float,
     gate_db: float,
     hf_restore: float,
     vocal_band_cut_db: float,
@@ -51,7 +50,6 @@ def resolve_preset(
         params.update(
             {
                 "strength": strength if strength is not None else params["strength"],
-                "preserve_sfx": preserve_sfx if preserve_sfx is not None else params["preserve_sfx"],
                 "gate_db": gate_db if gate_db is not None else params["gate_db"],
                 "hf_restore": hf_restore if hf_restore is not None else params["hf_restore"],
                 "vocal_band_cut_db": vocal_band_cut_db if vocal_band_cut_db is not None else params["vocal_band_cut_db"],
@@ -62,7 +60,6 @@ def resolve_preset(
 
     params = {
         "strength": strength if strength is not None else PRESETS["balanced"]["strength"],
-        "preserve_sfx": preserve_sfx if preserve_sfx is not None else PRESETS["balanced"]["preserve_sfx"],
         "gate_db": gate_db if gate_db is not None else PRESETS["balanced"]["gate_db"],
         "hf_restore": hf_restore if hf_restore is not None else PRESETS["balanced"]["hf_restore"],
         "vocal_band_cut_db": vocal_band_cut_db if vocal_band_cut_db is not None else PRESETS["balanced"]["vocal_band_cut_db"],
@@ -93,7 +90,6 @@ def run(
     mode: Mode = typer.Option("auto", help="auto -> track mute if possible, else demucs"),
     preset: Optional[Preset] = typer.Option("balanced", help="Parameter preset"),
     strength: Optional[float] = typer.Option(None, min=0.0, max=2.0, help="Voice removal strength (allows over-subtraction)"),
-    preserve_sfx: Optional[float] = typer.Option(None, min=0.0, max=1.0, help="Blend back original SFX/BGM"),
     gate_db: Optional[float] = typer.Option(None, help="Noise gate threshold in dB"),
     hf_restore: Optional[float] = typer.Option(None, help="Restore high frequencies amount"),
     vocal_band_cut_db: Optional[float] = typer.Option(None, help="Additional vocal band cut in dB (negative to cut)"),
@@ -118,7 +114,7 @@ def run(
     label = video_file.name
     audio_streams = list_audio_streams(video_file)
     chosen_mode = determine_mode(mode, audio_streams)
-    params = resolve_preset(preset, strength, preserve_sfx, gate_db, hf_restore, vocal_band_cut_db)
+    params = resolve_preset(preset, strength, gate_db, hf_restore, vocal_band_cut_db)
 
     logger.info("Mode=%s video=%s", chosen_mode, video_file)
 
