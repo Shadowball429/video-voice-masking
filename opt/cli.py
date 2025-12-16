@@ -116,10 +116,6 @@ def run(
         raise typer.Exit(code=1)
 
     label = video_file.name
-    vc_hint = INPUT_DIR / "input_vc.mp3"
-    if vc_hint.exists():
-        logger.info("Reference VC data detected (optional): %s", vc_hint)
-
     audio_streams = list_audio_streams(video_file)
     chosen_mode = determine_mode(mode, audio_streams)
     params = resolve_preset(preset, strength, preserve_sfx, gate_db, hf_restore, vocal_band_cut_db)
