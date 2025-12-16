@@ -7,7 +7,7 @@ USER root
 # ロケールの設定
 # ロケールの設定に関するステップです。日本語のUTF-8エンコーディングとタイムゾーンを設定します。
 RUN apt-get update
-RUN apt-get -y install locales && \
+RUN apt-get -y install locales ffmpeg build-essential libsndfile1 && \
     localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
 ENV LANG=ja_JP.UTF-8
 ENV LANGUAGE=ja_JP:ja

@@ -7,6 +7,17 @@ requires-python = ">=3.12"
 # uv で解決する依存。追加したら uv lock を再実行する
 dependencies = [
     "requests",
+    "pydub",
+    "typer",
+    "tqdm",
+    "pydantic",
+    "numpy",
+    "soundfile",
+    "torch",
+    "torchaudio",
+    "demucs",
+    "torchcodec",
+    "webrtcvad",
 ]
 
 [build-system]
