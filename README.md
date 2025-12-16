@@ -39,13 +39,36 @@
 
 1. 動作確認
 
-    ```bash
-    uv run python opt/sample.py 180.0
-    ```
+    - サンプルスクリプト
 
-    結果として3.141592653589793のように円周率の値が出てきたら成功。
+        ```bash
+        uv run python opt/sample.py 180.0
+        ```
 
-1. 実行環境から戻る
+        結果として3.141592653589793のように円周率の値が出てきたら成功。
+
+    - ボイス除去ツール
+
+        1) 入力動画を `opt/input/*.mp4` に配置する。
+        1) 標準除去（ボイス減算＋帯域カット＋ゲート）
+
+        ```bash
+        uv run python -m opt.cli --mode auto --preset balanced --export-intermediates
+        ```
+
+        1) Demucsの非ボイス音声をそのまま採用する場合
+
+        ```bash
+        uv run python -m opt.cli --mode auto --preset balanced --replace-with-no-vocals --export-intermediates
+        ```
+
+        出力例:
+        - `opt/output/<元ファイル名>_no_vc.mp4`（標準除去時）
+        - `opt/output/<元ファイル名>_demucs_no_vocals.mp4`（非ボイス差し替え時）
+        - `opt/output/<元ファイル名>_estimated_no_vocals.wav`（Demucs推定の非ボイス）
+        - `opt/output/<元ファイル名>_estimated_vc.wav`（`--export-intermediates`指定時の推定ボイス）
+
+2. 実行環境から戻る
 
     ```bash
     exit
