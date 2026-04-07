@@ -14,9 +14,7 @@ AudioTuple = Tuple[np.ndarray, int]
 
 
 def load_audio(path: Path, target_sr: int = 48000) -> AudioTuple:
-    data, sr = sf.read(path)
-    if data.ndim == 1:
-        data = data[:, None]
+    data, sr = sf.read(path, dtype="float32", always_2d=True)
     logger.debug("Loaded audio %s with shape %s @ %s Hz", path, data.shape, sr)
     if sr != target_sr:
         tensor = torch.from_numpy(data.T)
@@ -24,7 +22,7 @@ def load_audio(path: Path, target_sr: int = 48000) -> AudioTuple:
         data = resampled.T.numpy()
         sr = target_sr
         logger.debug("Resampled to %s Hz", target_sr)
-    return data.astype(np.float32), sr
+    return data, sr
 
 
 def write_audio(path: Path, audio: np.ndarray, sample_rate: int) -> None:
@@ -37,7 +35,8 @@ def peak_normalize(audio: np.ndarray, peak_db: float = -1.0) -> np.ndarray:
     if peak == 0:
         return audio
     target = 10 ** (peak_db / 20)
-    return audio * (target / peak)
+    audio *= target / peak
+    return audio
 
 
 def _match_channels(src: np.ndarray, target_channels: int) -> np.ndarray:

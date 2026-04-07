@@ -143,14 +143,13 @@ def run(
                 typer.echo(f"Unsupported mode: {chosen_mode}", err=True)
                 raise typer.Exit(code=1)
 
-            original_audio, sr = load_audio(extracted)
-            vocals_audio, _ = load_audio(vocals_path, target_sr=sr)
-
             if replace_with_no_vocals:
                 print_progress(label, 55, "Demucs出力へ差し替え")
-                no_vocals_audio, _ = load_audio(no_vocals_path, target_sr=sr)
+                no_vocals_audio, sr = load_audio(no_vocals_path)
                 processed = peak_normalize(no_vocals_audio, peak_db=-1.0)
             else:
+                original_audio, sr = load_audio(extracted)
+                vocals_audio, _ = load_audio(vocals_path, target_sr=sr)
                 print_progress(label, 55, "抽出ボイスの減算")
                 processed = subtract_vocals(original_audio, vocals_audio, params["strength"])
                 processed = suppress_vocal_band(processed, sr, params["vocal_band_cut_db"])
