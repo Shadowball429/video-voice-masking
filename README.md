@@ -62,6 +62,24 @@
         uv run python -m opt.cli --mode auto --preset balanced --replace-with-no-vocals --export-intermediates
         ```
 
+        1) 確実にDemucs経由で再実行する場合（`mode=ai`を明示）
+
+        ```bash
+        uv run python -m opt.cli --mode ai --preset balanced --replace-with-no-vocals --export-intermediates
+        ```
+
+        1) ローカルからコンテナ経由で直接実行する場合
+
+        ```bash
+        docker-compose exec python3 uv run python -m opt.cli --mode ai --preset balanced --replace-with-no-vocals --export-intermediates
+        ```
+
+        1) 動作確認（Demucs経由の出力ファイルを確認）
+
+        ```bash
+        ls -1 opt/output/*_demucs_no_vocals.mp4 opt/output/*_estimated_no_vocals.wav
+        ```
+
         出力例:
         - `opt/output/<元ファイル名>_no_vc.mp4`（標準除去時）
         - `opt/output/<元ファイル名>_demucs_no_vocals.mp4`（非ボイス差し替え時）

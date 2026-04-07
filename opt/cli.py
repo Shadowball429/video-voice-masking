@@ -114,6 +114,9 @@ def run(
         label = video_file.name
         audio_streams = list_audio_streams(video_file)
         chosen_mode = determine_mode(mode, audio_streams)
+        if replace_with_no_vocals and chosen_mode == "tracks":
+            logger.info("replace_with_no_vocals is enabled; forcing mode=ai instead of tracks")
+            chosen_mode = "ai"
 
         logger.info("Mode=%s video=%s", chosen_mode, video_file)
 

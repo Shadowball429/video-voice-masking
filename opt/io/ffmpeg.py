@@ -95,6 +95,8 @@ def mute_audio_track(input_path: Path, track_index: int, output_path: Path) -> N
         "copy",
         "-c:a",
         "copy",
+        "-c:a:" + str(track_index),
+        "aac",
         "-filter:a:" + str(track_index),
         "volume=0",
         str(output_path),
