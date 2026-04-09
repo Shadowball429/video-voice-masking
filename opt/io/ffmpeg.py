@@ -1,7 +1,5 @@
-import json
 import subprocess
 from pathlib import Path
-from typing import Any
 
 from opt.logging_setup import setup_logging
 
@@ -16,28 +14,6 @@ def _run(command: list[str], description: str) -> subprocess.CompletedProcess[st
         raise RuntimeError(f"{description} failed: {result.stderr}")
     logger.debug("%s succeeded", description)
     return result
-
-
-def probe_streams(input_path: Path) -> dict[str, Any]:
-    command = [
-        "ffprobe",
-        "-v",
-        "error",
-        "-show_streams",
-        "-print_format",
-        "json",
-        str(input_path),
-    ]
-    result = _run(command, "ffprobe")
-    return json.loads(result.stdout)
-
-
-def list_audio_streams(input_path: Path) -> list[dict[str, Any]]:
-    probe = probe_streams(input_path)
-    streams = probe.get("streams", [])
-    audio_streams = [s for s in streams if s.get("codec_type") == "audio"]
-    logger.info("Found %d audio stream(s)", len(audio_streams))
-    return audio_streams
 
 
 def extract_audio(
@@ -81,24 +57,3 @@ def mux_video_with_audio(video_path: Path, audio_path: Path, output_path: Path) 
         str(output_path),
     ]
     _run(command, "mux video/audio")
-
-
-def mute_audio_track(input_path: Path, track_index: int, output_path: Path) -> None:
-    command = [
-        "ffmpeg",
-        "-y",
-        "-i",
-        str(input_path),
-        "-map",
-        "0",
-        "-c:v",
-        "copy",
-        "-c:a",
-        "copy",
-        "-c:a:" + str(track_index),
-        "aac",
-        "-filter:a:" + str(track_index),
-        "volume=0",
-        str(output_path),
-    ]
-    _run(command, f"mute audio track {track_index}")

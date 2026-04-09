@@ -39,39 +39,19 @@
 
 1. 動作確認
 
-    - サンプルスクリプト
-
-        ```bash
-        uv run python opt/sample.py 180.0
-        ```
-
-        結果として3.141592653589793のように円周率の値が出てきたら成功。
-
     - ボイス除去ツール
 
         1) 入力動画を `opt/input/*.mp4` に配置する。
-        1) 標準除去（ボイス減算＋帯域カット＋ゲート）
+        1) Demucsで実行する。
 
         ```bash
-        uv run python -m opt.cli --mode auto --preset balanced --export-intermediates
+        uv run python -m opt.cli
         ```
 
-        1) Demucsの非ボイス音声をそのまま採用する場合
+        1) コンテナ経由で直接実行する場合
 
         ```bash
-        uv run python -m opt.cli --mode auto --preset balanced --replace-with-no-vocals --export-intermediates
-        ```
-
-        1) 確実にDemucs経由で再実行する場合（`mode=ai`を明示）
-
-        ```bash
-        uv run python -m opt.cli --mode ai --preset balanced --replace-with-no-vocals --export-intermediates
-        ```
-
-        1) ローカルからコンテナ経由で直接実行する場合
-
-        ```bash
-        docker-compose exec python3 uv run python -m opt.cli --mode ai --preset balanced --replace-with-no-vocals --export-intermediates
+        docker-compose exec python3 uv run python -m opt.cli
         ```
 
         1) 動作確認（Demucs経由の出力ファイルを確認）
@@ -81,10 +61,8 @@
         ```
 
         出力例:
-        - `opt/output/<元ファイル名>_no_vc.mp4`（標準除去時）
-        - `opt/output/<元ファイル名>_demucs_no_vocals.mp4`（非ボイス差し替え時）
+        - `opt/output/<元ファイル名>_demucs_no_vocals.mp4`（Demucs推定の非ボイス音声で置換した動画）
         - `opt/output/<元ファイル名>_estimated_no_vocals.wav`（Demucs推定の非ボイス）
-        - `opt/output/<元ファイル名>_estimated_vc.wav`（`--export-intermediates`指定時の推定ボイス）
 
 2. 実行環境から戻る
 
