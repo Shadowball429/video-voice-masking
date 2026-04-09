@@ -45,9 +45,9 @@ def run(
     targets = collect_inputs(input_path)
     if not targets:
         msg = "No mp4 files found in opt/input"
-        logger.error(msg)
-        typer.echo(msg, err=True)
-        raise typer.Exit(code=1)
+        logger.info(msg)
+        typer.echo(msg)
+        return
 
     for video_file in targets:
         label = video_file.name

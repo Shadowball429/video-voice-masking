@@ -5,7 +5,12 @@ services:
     image: hogehoge
     container_name: 'python3'
     working_dir: '/root/'
-    entrypoint: ["/bin/sh", "-c", "sleep infinity"]
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        uv run python -m opt.cli
+        sleep infinity
     tty: true
     volumes:
       - ./opt:/root/opt

@@ -8,6 +8,8 @@
     docker-compose up -d --build
     ```
 
+    起動時に `uv run python -m opt.cli` が自動実行され、`opt/input/*.mp4` が処理されます。
+
 1. 作られたイメージの確認
 
     ```bash
@@ -42,13 +44,13 @@
     - ボイス除去ツール
 
         1) 入力動画を `opt/input/*.mp4` に配置する。
-        1) Demucsで実行する。
+        1) 起動時に自動実行される（`docker-compose up -d --build`）。
 
         ```bash
-        uv run python -m opt.cli
+        docker-compose up -d --build
         ```
 
-        1) コンテナ経由で直接実行する場合
+        1) 手動で再実行する場合
 
         ```bash
         docker-compose exec python3 uv run python -m opt.cli
@@ -64,7 +66,7 @@
         - `opt/output/<元ファイル名>_demucs_no_vocals.mp4`（Demucs推定の非ボイス音声で置換した動画）
         - `opt/output/<元ファイル名>_estimated_no_vocals.wav`（Demucs推定の非ボイス）
 
-2. 実行環境から戻る
+1. 実行環境から戻る
 
     ```bash
     exit
