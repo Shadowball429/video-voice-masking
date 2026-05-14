@@ -2,6 +2,12 @@
 
 ## 実行環境のセットアップ
 
+### メモリ設定（Demucs実行前に必須）
+
+- `docker-compose.yml` で `python3` サービスに `mem_limit: 8g` を設定済みです。
+- Docker Desktop を利用している場合、アプリ全体のメモリ上限が低いとコンテナ内で `rc=-9`（OOM Kill）が発生します。
+- Docker Desktop -> Settings -> Resources -> Memory を `8GB以上（推奨12GB）` に設定してください。
+
 1. コンテナの起動
 
     ```bash
@@ -55,6 +61,17 @@
         ```bash
         docker-compose exec python3 uv run python -m opt.cli
         ```
+
+        `rc=-9` が出る場合は、次を実行してコンテナを再作成してから再実行してください。
+
+        ```bash
+        docker-compose down
+        docker-compose up -d --build
+        docker-compose exec python3 uv run python -m opt.cli
+        ```
+
+        補足:
+        - 依存追加後（`pyproject.toml` 更新後）は `docker-compose up -d --build` で再ビルドが必須です。
 
         1) 動作確認（Demucs経由の出力ファイルを確認）
 

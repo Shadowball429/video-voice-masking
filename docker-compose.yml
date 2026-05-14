@@ -5,12 +5,9 @@ services:
     image: hogehoge
     container_name: 'python3'
     working_dir: '/root/'
-    entrypoint:
-      - /bin/sh
-      - -c
-      - |
-        uv run python -m opt.cli
-        sleep infinity
+    mem_limit: 12g
+    shm_size: 2g
+    entrypoint: ["/bin/sh", "-c", "sleep infinity"]
     tty: true
     volumes:
       - ./opt:/root/opt
